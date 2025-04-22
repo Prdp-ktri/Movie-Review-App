@@ -16,10 +16,14 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // MongoDB connection
 mongoose
-  .connect(process.env.MONGODB_URI || "your_mongo_uri_here", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    process.env.MONGODB_URI ||
+      "mongodb+srv://pradeepseeks:pradeepseeks0808@cluster0.bgpv7ce.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB error:", err));
 
