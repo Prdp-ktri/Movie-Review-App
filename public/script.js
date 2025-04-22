@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const reviewList = document.getElementById("reviewList");
 
   // Load existing reviews on page load
-  fetch("/api/reviews")
+  fetch("https://movie-review-app-57cf.onrender.com/api/reviews")
     .then((response) => response.json())
     .then((reviews) => {
       reviews.forEach(addReviewToDOM);
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const rating = formData.get("rating");
       const reviewer = formData.get("reviewer");
 
-      fetch("/api/reviews", {
+      fetch("https://movie-review-app-57cf.onrender.com/api/reviews", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

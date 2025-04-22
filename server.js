@@ -10,11 +10,9 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://movie-review-app-57cf.onrender.com",
-    ],
-    methods: ["GET", "POST"],
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"],
   })
 );
 
