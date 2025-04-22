@@ -17,11 +17,18 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
 
-      const formData = new FormData(form); // includes all form fields including file input
+      const formData = new FormData(form);
+      const title = formData.get("title");
+      const review = formData.get("review");
+      const rating = formData.get("rating");
+      const reviewer = formData.get("reviewer");
 
-      fetch("https://movie-review-app-57cf.onrender.com/api/reviews", {
+      fetch("/api/reviews", {
         method: "POST",
-        body: formData, // No JSON.stringify — this handles files too
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, review, rating, reviewer }),
       })
         .then(async (res) => {
           if (!res.ok) {
@@ -32,8 +39,8 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then((data) => {
           console.log("Review submitted:", data);
-          addReviewToDOM(data); // Add the new review to the page
-          form.reset(); // Optional: reset form after submission
+          addReviewToDOM(data); // Add the new review to the DOM
+          form.reset(); // Reset the form
         })
         .catch((err) => console.error("Error submitting review:", err));
     });
