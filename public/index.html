@@ -13,9 +13,9 @@
 
   <!-- Review Submission Form -->
   <form id="reviewForm" enctype="multipart/form-data">
-    <input type="text" name="title" placeholder="Movie Title" required />
-    <textarea name="review" placeholder="Write your review here..." rows="5" required></textarea>
-    <select name="rating" required>
+    <input type="text" id="title" name="title" placeholder="Movie Title" required />
+    <textarea name="review" id="review" placeholder="Write your review here..." rows="5" required></textarea>
+    <select name="rating" id="rating" required>
       <option value="" disabled selected>Select Rating</option>
       <option value="⭐">⭐</option>
       <option value="⭐⭐">⭐⭐</option>
@@ -23,8 +23,8 @@
       <option value="⭐⭐⭐⭐">⭐⭐⭐⭐</option>
       <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</option>
     </select>
-    <input type="text" name="reviewer" placeholder="Your Name" required />
-    <input type="file" name="image" accept="image/*" />
+    <input type="text" id="reviewer" name="reviewer" placeholder="Your Name" required />
+    <input type="file" id="image" name="image" accept="image/*" />
     <button type="submit">Submit Review</button>
   </form>
   <div id="reviewList"></div>
