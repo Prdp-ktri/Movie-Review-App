@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const formData = new FormData(form);
 
-      fetch("https://movie-review-app-57cf.onrender.com/api/reviews", {
+      fetch("http://movie-review-app-57cf.onrender.com/api/reviews", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
