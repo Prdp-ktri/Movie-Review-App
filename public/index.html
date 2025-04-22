@@ -9,19 +9,27 @@
 </head>
 
 <body>
-  <div class="container">
-    <h1>🎬 Movie Review App</h1>
-    <form id="review-form">
-      <input type="text" name="title" placeholder="Movie Title" required />
-      <textarea name="review" placeholder="Your Review" required></textarea>
-      <input type="number" name="rating" placeholder="Rating (1-10)" min="1" max="10" required />
-      <input type="text" name="reviewer" placeholder="Your Name" required />
-      <input type="file" name="image" accept="image/*" />
-      <button type="submit">Submit Review</button>
-    </form>
+  <h1>🎬 Movie Review App</h1>
 
-    <div id="reviews"></div>
-  </div>
+  <!-- Review Submission Form -->
+  <form id="reviewForm" enctype="multipart/form-data">
+    <input type="text" name="title" placeholder="Movie Title" required />
+    <textarea name="review" placeholder="Write your review here..." rows="5" required></textarea>
+    <select name="rating" required>
+      <option value="" disabled selected>Select Rating</option>
+      <option value="⭐">⭐</option>
+      <option value="⭐⭐">⭐⭐</option>
+      <option value="⭐⭐⭐">⭐⭐⭐</option>
+      <option value="⭐⭐⭐⭐">⭐⭐⭐⭐</option>
+      <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</option>
+    </select>
+    <input type="text" name="reviewer" placeholder="Your Name" required />
+    <input type="file" name="image" accept="image/*" />
+    <button type="submit">Submit Review</button>
+  </form>
+
+  <!-- Review Display Section -->
+  <section id="reviews"></section>
 
   <script src="script.js"></script>
 </body>
