@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movie Review App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <h1>🎬 Movie Review App</h1>
+    <form id="review-form">
+      <input type="text" name="title" placeholder="Movie Title" required />
+      <textarea name="review" placeholder="Your Review" required></textarea>
+      <input type="number" name="rating" placeholder="Rating (1-10)" min="1" max="10" required />
+      <input type="text" name="reviewer" placeholder="Your Name" required />
+      <input type="file" name="image" accept="image/*" />
+      <button type="submit">Submit Review</button>
+    </form>
+
+    <div id="reviews"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
