@@ -1,11 +1,15 @@
 const form = document.getElementById("review-form");
 const reviewsDiv = document.getElementById("reviews");
 
-document.addEventListener("DOMContentLoaded", function () {
-  const myButton = document.getElementById("myButton");
-  if (myButton) {
-    myButton.addEventListener("click", handleClick);
-  }
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const formData = new FormData(form);
+  await fetch("/api/reviews", {
+    method: "POST",
+    body: formData,
+  });
+  form.reset();
+  loadReviews();
 });
 
 async function loadReviews() {
