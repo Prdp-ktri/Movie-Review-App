@@ -19,18 +19,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const formData = new FormData(form);
 
-      fetch("/api/reviews", {
+      fetch("https://movie-review-app-57cf.onrender.com/api/reviews", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, review, rating, reviewer }),
       })
-        .then((response) => response.json())
-        .then((newReview) => {
-          addReviewToDOM(newReview);
-          form.reset();
+        .then(async (res) => {
+          if (!res.ok) {
+            const text = await res.text();
+            throw new Error(`Server error ${res.status}: ${text}`);
+          }
+          return res.json();
         })
-        .catch((error) => {
-          console.error("Error submitting review:", error);
-        });
+        .then((data) => {
+          console.log("Review submitted:", data);
+        })
+        .catch((err) => console.error("Error submitting review:", err));
     });
   }
 
