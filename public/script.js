@@ -1,9 +1,13 @@
+let reviewerName = "";
+let reviewText = "";
+let ratingValue = "";
+
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("reviewForm");
   const reviewList = document.getElementById("reviewList");
 
   // Load existing reviews on page load
-  fetch("https://movie-review-app-57cf.onrender.com/api/reviews")
+  fetch("https://movie-review-backend-app.onrender.com/api/reviews")
     .then((response) => response.json())
     .then((reviews) => {
       reviews.forEach(addReviewToDOM);
@@ -23,26 +27,27 @@ document.addEventListener("DOMContentLoaded", function () {
       const rating = formData.get("rating");
       const reviewer = formData.get("reviewer");
 
-      fetch("https://movie-review-app-57cf.onrender.com/api/reviews", {
+      fetch("https://movie-review-backend-app.onrender.com/api/reviews", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title, review, rating, reviewer }),
+        body: JSON.stringify({
+          review: reviewText,
+          rating: ratingValue,
+          reviewer: reviewerName,
+        }),
       })
-        .then(async (res) => {
-          if (!res.ok) {
-            const text = await res.text();
-            throw new Error(`Server error ${res.status}: ${text}`);
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
           }
-          return res.json();
+          return response.json();
         })
         .then((data) => {
-          console.log("Review submitted:", data);
-          addReviewToDOM(data); // Add the new review to the DOM
-          form.reset(); // Reset the form
+          console.log("Review submitted successfully:", data);
         })
-        .catch((err) => console.error("Error submitting review:", err));
+        .catch((error) => console.error("Error submitting review:", error));
     });
   }
 
