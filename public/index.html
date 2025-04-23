@@ -2,36 +2,22 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Movie Review App</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <h1>🎬 Movie Review App</h1>
-
-  <!-- Review Submission Form -->
-  <form id="reviewForm" enctype="multipart/form-data">
-    <input type="text" id="title" name="title" placeholder="Movie Title" required />
-    <textarea name="review" id="reviewText" placeholder="Write your review here..." rows="5" required></textarea>
-    <select name="rating" id="ratingValue" required>
-      <option value="" disabled selected>Select Rating</option>
-      <option value="⭐">⭐</option>
-      <option value="⭐⭐">⭐⭐</option>
-      <option value="⭐⭐⭐">⭐⭐⭐</option>
-      <option value="⭐⭐⭐⭐">⭐⭐⭐⭐</option>
-      <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</option>
-    </select>
-    <input type="text" id="reviewer" name="reviewer" placeholder="Your Name" required />
-    <input type="file" id="image" name="image" accept="image/*" />
+  <form id="reviewForm">
+    <input type="text" name="title" placeholder="Movie Title" required />
+    <textarea name="review" placeholder="Write your review..." required></textarea>
+    <input type="text" name="rating" placeholder="Rating (1-5)" required />
+    <input type="text" name="reviewer" placeholder="Your Name" required />
     <button type="submit">Submit Review</button>
   </form>
   <div id="reviewList"></div>
-
-  <!-- Review Display Section -->
-  <section id="reviews"></section>
-
   <script src="script.js"></script>
 </body>
 
