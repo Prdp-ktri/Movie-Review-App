@@ -18,17 +18,10 @@ document.addEventListener("DOMContentLoaded", function () {
       e.preventDefault();
 
       const formData = new FormData(form);
-      const review = {
-        title: formData.get("title"),
-        review: formData.get("review"),
-        rating: formData.get("rating"),
-        reviewer: formData.get("reviewer"),
-      };
 
       fetch("http://localhost:3000/api/reviews", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(review),
+        body: formData,
       })
         .then((response) => {
           if (!response.ok) {
@@ -53,6 +46,11 @@ document.addEventListener("DOMContentLoaded", function () {
       <h3>${review.title} (${review.rating}/5)</h3>
       <p>${review.review}</p>
       <p><strong>Reviewer:</strong> ${review.reviewer || "Anonymous"}</p>
+      ${
+        review.coverImage
+          ? `<img src="${review.coverImage}" alt="Cover Image" class="cover-image" />`
+          : ""
+      }
       <button onclick="editReview('${review._id}')">Edit</button>
       <button onclick="deleteReview('${review._id}')">Delete</button>
       <hr/>
@@ -62,14 +60,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to edit a review
   window.editReview = function (reviewId) {
-    const newReviewText = prompt("Enter the updated review:");
-    const newRating = prompt("Enter the updated rating (1-5):");
+    const reviewItem = document.querySelector(
+      `.review-item[data-id="${reviewId}"]`
+    );
+    const currentTitle = reviewItem
+      .querySelector("h3")
+      .textContent.split(" (")[0];
+    const currentReviewText =
+      reviewItem.querySelector("p:nth-of-type(1)").textContent;
+    const currentRating = reviewItem
+      .querySelector("h3")
+      .textContent.match(/\((\d)\/5\)/)?.[1];
+    const currentReviewer = reviewItem
+      .querySelector("p:nth-of-type(2)")
+      .textContent.replace("Reviewer: ", "");
 
-    if (newReviewText && newRating) {
+    const newTitle = prompt("Enter the updated title:", currentTitle);
+    const newReviewText = prompt(
+      "Enter the updated review:",
+      currentReviewText
+    );
+    const newRating = prompt("Enter the updated rating (1-5):", currentRating);
+    const newReviewer = prompt(
+      "Enter the updated reviewer name:",
+      currentReviewer
+    );
+
+    const coverImageInput = document.createElement("input");
+    coverImageInput.type = "file";
+    coverImageInput.accept = "image/*";
+    document.body.appendChild(coverImageInput);
+    coverImageInput.click();
+
+    coverImageInput.onchange = function () {
+      const formData = new FormData();
+      formData.append("title", newTitle || currentTitle);
+      formData.append("review", newReviewText || currentReviewText);
+      formData.append("rating", newRating || currentRating);
+      formData.append("reviewer", newReviewer || currentReviewer);
+      if (coverImageInput.files[0]) {
+        formData.append("coverImage", coverImageInput.files[0]);
+      }
+
       fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ review: newReviewText, rating: newRating }),
+        body: formData,
       })
         .then((response) => {
           if (!response.ok) {
@@ -78,17 +113,27 @@ document.addEventListener("DOMContentLoaded", function () {
           return response.json();
         })
         .then((updatedReview) => {
-          const reviewItem = document.querySelector(
-            `.review-item[data-id="${reviewId}"]`
-          );
-          reviewItem.querySelector("p:nth-of-type(1)").textContent =
-            updatedReview.review;
           reviewItem.querySelector(
             "h3"
           ).textContent = `${updatedReview.title} (${updatedReview.rating}/5)`;
+          reviewItem.querySelector("p:nth-of-type(1)").textContent =
+            updatedReview.review;
+          reviewItem.querySelector(
+            "p:nth-of-type(2)"
+          ).textContent = `Reviewer: ${updatedReview.reviewer}`;
+          if (updatedReview.coverImage) {
+            const image =
+              reviewItem.querySelector(".cover-image") ||
+              document.createElement("img");
+            image.src = updatedReview.coverImage;
+            image.alt = "Cover Image";
+            image.className = "cover-image";
+            reviewItem.appendChild(image);
+          }
+          document.body.removeChild(coverImageInput);
         })
         .catch((error) => console.error("Error updating review:", error));
-    }
+    };
   };
 
   // Function to delete a review

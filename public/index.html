@@ -10,11 +10,12 @@
 
 <body>
   <h1>🎬 Movie Review App</h1>
-  <form id="reviewForm">
+  <form id="reviewForm" enctype="multipart/form-data">
     <input type="text" name="title" placeholder="Movie Title" required />
     <textarea name="review" placeholder="Write your review..." required></textarea>
     <input type="text" name="rating" placeholder="Rating (1-5)" required />
     <input type="text" name="reviewer" placeholder="Your Name" required />
+    <input type="file" name="coverImage" accept="image/*" />
     <button type="submit">Submit Review</button>
   </form>
   <div id="reviewList"></div>
