@@ -107,5 +107,7 @@ app.put("/api/reviews/:id", upload.single("coverImage"), async (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(
+    `Server running on https://movie-review-app-yqis.onrender.com:${PORT}`
+  );
 });
