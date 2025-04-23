@@ -33,22 +33,9 @@ const reviewSchema = new mongoose.Schema({
   review: String,
   rating: String,
   reviewer: String,
-  coverImage: String,
 });
 
 const Review = mongoose.model("Review", reviewSchema);
-
-// Multer configuration for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
-
-const upload = multer({ storage });
 
 // Routes
 
@@ -63,16 +50,27 @@ app.get("/api/reviews", async (req, res) => {
 });
 
 // Add a new review
-app.post("/api/reviews", upload.single("coverImage"), async (req, res) => {
+app.post("/api/reviews", async (req, res) => {
   try {
-    const newReview = new Review({
-      ...req.body,
-      coverImage: req.file ? `/uploads/${req.file.filename}` : null,
-    });
+    const newReview = new Review(req.body);
     await newReview.save();
     res.json(newReview);
   } catch (error) {
     res.status(500).json({ message: "Error saving review" });
+  }
+});
+
+// Update a review
+app.put("/api/reviews/:id", async (req, res) => {
+  try {
+    const updatedReview = await Review.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true } // Return the updated document
+    );
+    res.json(updatedReview);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating review" });
   }
 });
 
@@ -86,28 +84,7 @@ app.delete("/api/reviews/:id", async (req, res) => {
   }
 });
 
-// No major changes here apart from ensuring the PUT route accepts a file upload
-
-app.put("/api/reviews/:id", upload.single("coverImage"), async (req, res) => {
-  try {
-    const updatedReviewData = { ...req.body };
-    if (req.file) {
-      updatedReviewData.coverImage = `/uploads/${req.file.filename}`;
-    }
-    const updatedReview = await Review.findByIdAndUpdate(
-      req.params.id,
-      updatedReviewData,
-      { new: true }
-    );
-    res.json(updatedReview);
-  } catch (error) {
-    res.status(500).json({ message: "Error updating review" });
-  }
-});
-
 // Start server
 app.listen(PORT, () => {
-  console.log(
-    `Server running on https://movie-review-app-yqis.onrender.com:${PORT}`
-  );
+  console.log(`Server running on http://localhost:${PORT}`);
 });

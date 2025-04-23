@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const reviewList = document.getElementById("reviewList");
 
   // Load existing reviews on page load
-  fetch("https://movie-review-app-yqis.onrender.com/api/reviews")
+  fetch("http://localhost:3000/api/reviews")
     .then((response) => response.json())
     .then((reviews) => {
       reviews.forEach(addReviewToDOM);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const formData = new FormData(form);
 
-      fetch("https://movie-review-app-yqis.onrender.com/api/reviews", {
+      fetch("http://localhost:3000/api/reviews", {
         method: "POST",
         body: formData,
       })
@@ -102,13 +102,10 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append("coverImage", coverImageInput.files[0]);
       }
 
-      fetch(
-        `https://movie-review-app-yqis.onrender.com/api/reviews/${reviewId}`,
-        {
-          method: "PUT",
-          body: formData,
-        }
-      )
+      fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
+        method: "PUT",
+        body: formData,
+      })
         .then((response) => {
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -141,12 +138,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to delete a review
   window.deleteReview = function (reviewId) {
-    fetch(
-      `https://movie-review-app-yqis.onrender.com/api/reviews/${reviewId}`,
-      {
-        method: "DELETE",
-      }
-    )
+    fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
+      method: "DELETE",
+    })
       .then((response) => {
         if (response.ok) {
           document
