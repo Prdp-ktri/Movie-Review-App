@@ -1,30 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
 const multer = require("multer");
-const path = require("path"); // Import the path module
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const corsOptions = {
-  origin: "http://localhost:3000",
-};
-app.use(cors(corsOptions));
-
 // Middleware
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type"],
-  })
-);
-
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use(express.static(path.join(__dirname, "public"))); // Use path module here
+app.use(express.static(path.join(__dirname, "public")));
 
 // MongoDB connection
 mongoose
@@ -37,23 +25,66 @@ mongoose
     }
   )
   .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB error:", err));
+  .catch((err) => console.error("MongoDB connection error:", err));
 
-// Routes
-const Review = require("./models/Review"); // assuming this file exists
-
-app.get("/api/reviews", async (req, res) => {
-  const reviews = await Review.find();
-  res.json(reviews);
+// Review model
+const reviewSchema = new mongoose.Schema({
+  title: String,
+  review: String,
+  rating: String,
+  reviewer: String,
 });
 
+const Review = mongoose.model("Review", reviewSchema);
+
+// Routes
+
+// Fetch all reviews
+app.get("/api/reviews", async (req, res) => {
+  try {
+    const reviews = await Review.find();
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching reviews" });
+  }
+});
+
+// Add a new review
 app.post("/api/reviews", async (req, res) => {
-  const review = new Review(req.body);
-  await review.save();
-  res.json(review);
+  try {
+    const newReview = new Review(req.body);
+    await newReview.save();
+    res.json(newReview);
+  } catch (error) {
+    res.status(500).json({ message: "Error saving review" });
+  }
+});
+
+// Update a review
+app.put("/api/reviews/:id", async (req, res) => {
+  try {
+    const updatedReview = await Review.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true } // Return the updated document
+    );
+    res.json(updatedReview);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating review" });
+  }
+});
+
+// Delete a review
+app.delete("/api/reviews/:id", async (req, res) => {
+  try {
+    await Review.findByIdAndDelete(req.params.id);
+    res.json({ message: "Review deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting review" });
+  }
 });
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
