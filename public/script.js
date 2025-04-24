@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const reviewList = document.getElementById("reviewList");
 
   // Load existing reviews on page load
-  fetch("http://localhost:3000/api/reviews")
+  fetch("/api/reviews")
     .then((response) => response.json())
     .then((reviews) => {
       reviews.forEach(addReviewToDOM);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const formData = new FormData(form);
 
-      fetch("http://localhost:3000/api/reviews", {
+      fetch("/api/reviews", {
         method: "POST",
         body: formData,
       })
@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append("coverImage", coverImageInput.files[0]);
       }
 
-      fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
+      fetch(`/api/reviews/${reviewId}`, {
         method: "PUT",
         body: formData,
       })
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to delete a review
   window.deleteReview = function (reviewId) {
-    fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
+    fetch(`/api/reviews/${reviewId}`, {
       method: "DELETE",
     })
       .then((response) => {
